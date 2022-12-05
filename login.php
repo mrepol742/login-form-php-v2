@@ -1,7 +1,7 @@
 <?php
-//include("connections.php");
+include("connections.php");
 
-$email = $password = $success = "";
+$email = $password  = "";
 $emailErr = $passwordErr = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -18,7 +18,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     if (isset($_POST['submit'])) {
-		
+		$check_email = mysqli_query($conn, "SELECT * FROM thecompany where email = '$email'");
+        if (mysqli_num_rows($check_email) > 0) {
+            while ($row = mysqli_fetch_assoc($check_email)) {
+                $db_password = $row["pass"];
+                $db_account_type = $row["account_type"];
+                if ($db_password == $password) {
+                    if ($db_account_type == "1"){
+                        echo "<script>window.location.href='admin';</script>";
+                    } else {
+                        echo "<script>window.location.href='user';</script>";
+                    }
+                } else {
+                    echo "Password is incorrect";
+                }
+            }
+        } else {
+            echo "Email is not registered";
+        }
 	}
     if (isset($_POST['create'])) {
         header('Location: create.php');
@@ -51,11 +68,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form action="<?php htmlspecialchars('php_self'); ?>" method="post">
                 <div class="user-box">
                     <input type="text" name="email" placeholder="Email">
-                    <?php echo "<div class=\"err\">".$emailErr."</div>" ?> 
+                    <?php echo "<div class=\"error\">" . $emailErr . "</div>" ?> 
                 </div>
                 <div class="user-box">
                     <input type="password" name="password"  placeholder="Password">
-                    <?php echo "<div class=\"err\">".$PasswordErr."</div>" ?> 
+                    <?php echo "<div class=\"error\">" . $passwordErr . "</div>" ?> 
                 </div>
                 <div class="user-actions">
                     <button class="btn" name="submit" type="submit">Login</button> <button class="btn" name="create">Create Account</button> <br><br>

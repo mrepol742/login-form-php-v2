@@ -1,8 +1,8 @@
 <?php
-//include("connections.php");
+include("connections.php");
 
-$email = $password = $success = "";
-$emailErr = $passwordErr = "";
+$email = $name = $password = $cpassword= "";
+$emailErr = $nameErr = $passwordErr = $cPasswordErr = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
  
@@ -11,14 +11,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $email = $_POST["email"];
     }
+    if (empty($_POST["name"])) {
+        $nameErr = "Name is required!";
+    } else {
+        $name = $_POST["name"];
+    }
     if (empty($_POST["password"])) {
         $passwordErr = "Password is required!";
     } else {
         $password = $_POST["password"];
     }
+    if (empty($_POST["cpassword"])) {
+        $cpasswordErr = "Confimr Password is required!";
+    } else {
+        $cpassword = $_POST["cpassword"];
+    }
     
     if (isset($_POST['submit'])) {
-
+        $chemail = mysqli_query($conn, "SELECT * FROM thecompany WHERE email= '" . $email . "'");
+        $check = mysqli_num_rows($chemail);
+        if ($check > 0) {
+            $emailErr = "Email is already Registered";
+        } else {
+            $sql = "INSERT INTO thecompany (fullname, email, pass, account_type) VALUES ('" . $fullname . "', '" . $email . "', '" . $password . "', '" . 2 . "')";
+            if ($conn->query($sql) === TRUE) {
+                echo "Successful";
+            }
+        }
 	}
     if (isset($_POST['login'])) {
         header('Location: login.php');
@@ -41,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <link rel="shortcut icon" href="anya.jpg">
         <link rel="apple-touch-icon" href="anya.jpg">
-        <title>Login</title>
+        <title>Create Account</title>
     </head>
     <body>
         <div class="login-box">
@@ -51,19 +70,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form action="<?php htmlspecialchars('php_self'); ?>" method="post">
                 <div class="user-box">
                     <input type="text" name="email" placeholder="Email">
-                    <?php echo "<div class=\"err\">".$emailErr."</div>" ?> 
+                    <?php echo "<div class=\"error\">" . $emailErr . "</div>" ?> 
                 </div>
                 <div class="user-box">
-                    <input type="text" name="name"  placeholder="Name">
-                    <?php echo "<div class=\"err\">".$NameErr."</div>" ?> 
+                    <input type="text" name="name" placeholder="Name">
+                    <?php echo "<div class=\"error\">" . $nameErr . "</div>" ?> 
                 </div>
                 <div class="user-box">
-                    <input type="password" name="password"  placeholder="Password">
-                    <?php echo "<div class=\"err\">".$PasswordErr."</div>" ?> 
+                    <input type="password" name="password" placeholder="Password">
+                    <?php echo "<div class=\"error\">" . $passwordErr . "</div>" ?> 
                 </div>
                 <div class="user-box">
-                    <input type="password" name="cpassword"  placeholder="Confirm Password">
-                    <?php echo "<div class=\"err\">".$CPasswordErr."</div>" ?> 
+                    <input type="password" name="cpassword" placeholder="Confirm Password">
+                    <?php echo "<div class=\"error\">" . $cpasswordErr . "</div>" ?> 
                 </div>
                 <div class="user-actions">
                     <button class="btn" name="login">Login</button> <button class="btn" name="submit" type="submit">Create Account</button> <br><br>

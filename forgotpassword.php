@@ -1,7 +1,7 @@
 <?php
-//include("connections.php");
+include("connections.php");
 
-$email = $password = $success = "";
+$email = $password = "";
 $emailErr = $passwordErr = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -15,6 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $passwordErr = "Password is required!";
     } else {
         $password = $_POST["password"];
+    }
+    if (empty($_POST["cpassword"])) {
+        $cpasswordErr = "Confirm Password is required!";
+    } else {
+        $cpassword = $_POST["cpassword"];
     }
     
     if (isset($_POST['submit'])) {
@@ -51,19 +56,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form action="<?php htmlspecialchars('php_self'); ?>" method="post">
                 <div class="user-box">
                     <input type="text" name="email" placeholder="Email">
-                    <?php echo "<div class=\"err\">".$emailErr."</div>" ?> 
+                    <?php echo "<div class=\"error\">" . $emailErr . "</div>" ?> 
                 </div>
                 <div class="user-box">
                     <input type="password" name="password"  placeholder="Password">
-                    <?php echo "<div class=\"err\">".$PasswordErr."</div>" ?> 
+                    <?php echo "<div class=\"error\">" . $passwordErr . "</div>" ?> 
                 </div>
                 <div class="user-box">
                     <input type="password" name="password"  placeholder="Confirm Password">
-                    <?php echo "<div class=\"err\">".$CPasswordErr."</div>" ?> 
+                    <?php echo "<div class=\"error\">" . $cpasswordErr . "</div>" ?> 
                 </div>
                 <div class="user-actions">
-                    <button class="btn" name="submit" type="submit">Login</button> <button class="btn" name="create">Create Account</button> <br><br>
-                    <button class="btn" name="forgot">Forgot Password</button>
+                    <button class="btn" name="submit" type="submit">Forgot Password</button> <br><br>
+                    <button class="btn" name="login">Login</button> <button class="btn" name="create">Create Account</button> 
                 </div>
             </form>
         </div>
