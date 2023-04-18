@@ -1,11 +1,11 @@
 # crud-php
 v2 of Login Crud System using PHP (Spy X Family)
+https://mrepol742.github.io#projects
 
-for more info visit https://mrepol742.github.io/#projects
+## Clone
+Open the htdocs folder (xampp) in terminal
+git clone https://github.com/mrepol742/crud-php
 
-  ## HTTP Server
-  php -S localhost:8000
-  
-  ## Load the webpage
-  http://localhost:8000/
-
+## Start
+Open the web browser and enter this url
+localhost/crud-php
